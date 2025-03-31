@@ -1,0 +1,15 @@
+<resources>
+    <dimen name="account_corner_radius_large">128dp</dimen>
+
+    <dimen name="common_space_min">8dp</dimen>
+    <dimen name="common_space_default">16dp</dimen>
+    <dimen name="common_space_extra_large">64dp</dimen>
+
+    <dimen name="common_space_none">0dp</dimen>
+    <dimen name="common_space_middle">24dp</dimen>
+    <dimen name="common_space_large">32dp</dimen>
+
+    <dimen name="login_img_size">128dp</dimen>
+
+    <dimen name="profile_image_size_large">256dp</dimen>
+</resources>

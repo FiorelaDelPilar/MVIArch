@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="red_500">#F44336</color>
+    <color name="red_900">#B71C1C</color>
+    <color name="red_900_dark">#670808</color>
+    <color name="deep_purple_a200">#7C4DFF</color>
+    <color name="deep_purple_a400">#651FFF</color>
+    <color name="yellow_200">#FFF59D</color>
+    <color name="yellow_600">#FDD835</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="red_a700">#D50000</color>
+</resources>

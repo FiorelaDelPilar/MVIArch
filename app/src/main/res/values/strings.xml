@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">MVI Arch</string>
+
+    <string name="account_title">Account</string>
+    <string name="account_sign_out_fail">Error, try again.</string>
+    <string name="account_request_user_fail">User not found.</string>
+    <string name="account_error_no_resolve">No compatible app found</string>
+    <string name="account_btn_sign_out">Sign Out</string>
+
+    <string name="common_general_fail">Error loading.</string>
+
+    <string name="dialog_update_title">Update rating</string>
+    <string name="dialog_update_ok">Update</string>
+    <string name="dialog_update_cancel">Cancel</string>
+
+    <string name="favourite_title">Favourites</string>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_pin">Pin</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_phone">Phone</string>
+
+    <string name="home_title">Home</string>
+    <string name="home_dialog_option_add">Add</string>
+    <string name="home_dialog_title">¿Add to favourites?</string>
+    <string name="home_no_wines">No wines found</string>
+    <string name="home_no_data">No data, try later</string>
+
+    <string name="login_title">Log in</string>
+    <string name="login_btn_login">Login</string>
+    <string name="login_tv_loading">Loading…</string>
+    <string name="login_auth_fail">Hello</string>
+    <string name="login_login_fail">Authentication error</string>
+
+    <string name="promo_title">Promo</string>
+    <string name="promo_request_fail">No promos</string>
+
+    <string name="room_save_success">Changes saved.</string>
+    <string name="room_save_fail">Error saving.</string>
+    <string name="room_update_fail">Error updating.</string>
+    <string name="room_request_fail">No data found.</string>
+
+</resources>

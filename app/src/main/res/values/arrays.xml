@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_home_options">
+        <item>@string/home_dialog_option_add</item>
+    </string-array>
+</resources>
