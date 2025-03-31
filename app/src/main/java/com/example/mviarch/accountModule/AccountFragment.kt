@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.accountModule
 
 import android.content.Intent
 import android.net.Uri
@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.mviarch.commonModule.utils.Constants
+import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
+import com.example.mviarch.mainModule.MainActivity
+import com.example.mviarch.R
 import com.example.mviarch.databinding.FragmentAccountBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch

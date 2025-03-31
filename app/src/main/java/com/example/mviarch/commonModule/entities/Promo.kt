@@ -1,8 +1,4 @@
-package com.example.mviarch
-
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+package com.example.mviarch.commonModule.entities
 
 /****
  * Project: Wines
@@ -18,8 +14,6 @@ import androidx.room.TypeConverters
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-@Database(entities = [Wine::class], version = 1)
-@TypeConverters(WineConverters::class)
-abstract class WineDatabase : RoomDatabase(){
-    abstract fun wineDao(): WineDao
-}
+data class Promo(val id: Long,
+                 val description: String,
+                 val url: String)

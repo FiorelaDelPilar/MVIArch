@@ -1,13 +1,14 @@
-package com.example.mviarch
+package com.example.mviarch.loginModule
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.mviarch.MainActivity
+import com.example.mviarch.R
+import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
+import com.example.mviarch.mainModule.MainActivity
 import com.example.mviarch.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay

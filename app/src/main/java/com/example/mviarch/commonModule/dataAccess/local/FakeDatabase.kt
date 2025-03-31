@@ -1,4 +1,6 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.local
+
+import com.example.mviarch.commonModule.entities.Promo
 
 /****
  * Project: Wines

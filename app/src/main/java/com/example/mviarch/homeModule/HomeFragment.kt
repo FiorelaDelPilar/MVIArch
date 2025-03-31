@@ -1,10 +1,17 @@
-package com.example.mviarch
+package com.example.mviarch.homeModule
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.mviarch.commonModule.utils.Constants
+import com.example.mviarch.R
+import com.example.mviarch.WineApplication
+import com.example.mviarch.commonModule.entities.Wine
+import com.example.mviarch.commonModule.dataAccess.retrofit.WineService
+import com.example.mviarch.commonModule.utils.OnClickListener
+import com.example.mviarch.commonModule.view.WineBaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers

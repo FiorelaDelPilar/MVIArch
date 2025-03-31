@@ -1,6 +1,7 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.room
 
 import androidx.room.TypeConverter
+import com.example.mviarch.commonModule.entities.Rating
 import com.google.gson.Gson
 
 /****

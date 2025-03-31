@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.entities
 
 /****
  * Project: Wines
@@ -14,6 +14,5 @@ package com.example.mviarch
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-data class Promo(val id: Long,
-                 val description: String,
-                 val url: String)
+data class Rating(var average: String,
+                  val reviews: String)

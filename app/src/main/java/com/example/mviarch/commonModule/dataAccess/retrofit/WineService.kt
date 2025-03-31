@@ -1,4 +1,8 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.retrofit
+
+import com.example.mviarch.commonModule.utils.Constants
+import com.example.mviarch.commonModule.entities.Wine
+import retrofit2.http.GET
 
 /****
  * Project: Wines
@@ -14,5 +18,8 @@ package com.example.mviarch
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-data class Rating(var average: String,
-                  val reviews: String)
+interface WineService {
+    // https://sampleapis.com/api-list/wines
+    @GET(Constants.PATH_WINES)
+    suspend fun getRedWines() : List<Wine>
+}

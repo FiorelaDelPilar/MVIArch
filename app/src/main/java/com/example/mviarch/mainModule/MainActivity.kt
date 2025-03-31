@@ -1,11 +1,12 @@
-package com.example.mviarch
+package com.example.mviarch.mainModule
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.mviarch.LoginFragment
+import com.example.mviarch.loginModule.LoginFragment
+import com.example.mviarch.R
 import com.example.mviarch.databinding.ActivityMainBinding
 
 /****

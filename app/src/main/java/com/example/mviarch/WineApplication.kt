@@ -2,6 +2,7 @@ package com.example.mviarch
 
 import android.app.Application
 import androidx.room.Room
+import com.example.mviarch.commonModule.dataAccess.room.WineDatabase
 
 /****
  * Project: Wines

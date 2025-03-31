@@ -1,6 +1,7 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.local
 
 import android.net.Uri
+import com.example.mviarch.commonModule.entities.FirebaseUser
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 

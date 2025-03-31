@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.homeModule
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.mviarch.commonModule.utils.OnClickListener
+import com.example.mviarch.R
+import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.databinding.ItemWineBinding
 
 /****

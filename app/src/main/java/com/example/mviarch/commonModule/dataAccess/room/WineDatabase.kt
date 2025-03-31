@@ -1,6 +1,9 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.room
 
-import retrofit2.http.GET
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.mviarch.commonModule.entities.Wine
 
 /****
  * Project: Wines
@@ -16,8 +19,8 @@ import retrofit2.http.GET
  * Coupons on my Website:
  * www.alainnicolastello.com
  ***/
-interface WineService {
-    // https://sampleapis.com/api-list/wines
-    @GET(Constants.PATH_WINES)
-    suspend fun getRedWines() : List<Wine>
+@Database(entities = [Wine::class], version = 1)
+@TypeConverters(WineConverters::class)
+abstract class WineDatabase : RoomDatabase(){
+    abstract fun wineDao(): WineDao
 }

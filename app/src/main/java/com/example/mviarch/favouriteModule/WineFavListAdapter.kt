@@ -1,7 +1,8 @@
-package com.example.mviarch
+package com.example.mviarch.favouriteModule
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mviarch.homeModule.WineListAdapter
 
 /****
  * Project: Wines

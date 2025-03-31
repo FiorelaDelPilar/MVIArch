@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

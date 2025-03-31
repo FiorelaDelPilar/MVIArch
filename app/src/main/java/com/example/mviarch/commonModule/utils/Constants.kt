@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.utils
 
 /****
  * Project: Wines

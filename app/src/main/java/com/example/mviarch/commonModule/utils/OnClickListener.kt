@@ -1,4 +1,6 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.utils
+
+import com.example.mviarch.commonModule.entities.Wine
 
 /****
  * Project: Wines

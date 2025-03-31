@@ -1,4 +1,4 @@
-package com.example.mviarch
+package com.example.mviarch.updateModule
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -11,6 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import com.example.mviarch.commonModule.utils.Constants
+import com.example.mviarch.R
+import com.example.mviarch.WineApplication
+import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.databinding.FragmentDialogUpdateBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers

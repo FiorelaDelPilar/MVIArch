@@ -1,10 +1,11 @@
-package com.example.mviarch
+package com.example.mviarch.commonModule.dataAccess.room
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.mviarch.commonModule.entities.Wine
 
 /****
  * Project: Wines
