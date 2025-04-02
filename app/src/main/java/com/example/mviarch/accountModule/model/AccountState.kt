@@ -1,4 +1,4 @@
-package com.example.mviarch.accountModule.module
+package com.example.mviarch.accountModule.model
 
 import com.example.mviarch.commonModule.entities.FirebaseUser
 
