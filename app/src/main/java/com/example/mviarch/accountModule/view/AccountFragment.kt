@@ -1,4 +1,4 @@
-package com.example.mviarch.accountModule
+package com.example.mviarch.accountModule.view
 
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +16,10 @@ import com.example.mviarch.commonModule.utils.Constants
 import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
 import com.example.mviarch.mainModule.MainActivity
 import com.example.mviarch.R
+import com.example.mviarch.accountModule.AccountViewModule
+import com.example.mviarch.accountModule.model.AccountRepository
+import com.example.mviarch.accountModule.model.AccountState
+import com.example.mviarch.commonModule.entities.FirebaseUser
 import com.example.mviarch.databinding.FragmentAccountBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -38,39 +42,41 @@ class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+    private lateinit var vm: AccountViewModule
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUserUI()
+        //setupUserUI()
+        setupViewModel()
+        setupObservers()
         setupButtons()
     }
 
-    private fun setupUserUI() {
-        val auth = FakeFirebaseAuth()
-        lifecycleScope.launch {
-            showProgress(true)
-            auth.getCurrentUser()?.let { user ->
-                with(binding) {
-                    tvName.text = user.displayName
-                    tvEmail.text = user.email
-                    tvPhone.text = user.phone
+    private fun setupViewModel() {
+        val vm = AccountViewModule(AccountRepository(FakeFirebaseAuth()))
+    }
 
-                    Glide.with(requireContext())
-                        .load(user.photoUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .into(imgProfile)
-                }
-                setupIntents()
-            }
-            showProgress(false)
+    private fun setupUserUI(user: FirebaseUser) {
+        with(binding) {
+            tvName.text = user.displayName
+            tvEmail.text = user.email
+            tvPhone.text = user.phone
+
+            Glide.with(requireContext())
+                .load(user.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(imgProfile)
         }
+        setupIntents()
     }
 
     private fun setupIntents() {
@@ -92,28 +98,44 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun launchIntent(intent: Intent){
+    private fun launchIntent(intent: Intent) {
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(intent)
         } else {
-            Toast.makeText(requireActivity(), getString(R.string.account_error_no_resolve), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireActivity(),
+                getString(R.string.account_error_no_resolve),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun setupButtons() {
         binding.btnSignOut.setOnClickListener {
             lifecycleScope.launch {
-                showProgress(true)
-                val auth = FakeFirebaseAuth()
-                if (auth.signOut()){
-                    (requireActivity() as MainActivity).apply {
-                        setupNavView(false)
-                        launchLoginUI()
+                //TODO
+            }
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+
+            vm.state.collect { state ->
+                when (state) {
+                    is AccountState.Init -> {}
+                    is AccountState.ShowProgress -> showProgress(true)
+                    is AccountState.HideProgress -> showProgress(false)
+                    is AccountState.SignOutSuccess -> {
+                        (requireActivity() as MainActivity).apply {
+                            setupNavView(false)
+                            launchLoginUI()
+                        }
                     }
-                    showProgress(false)
-                } else {
-                    showProgress(false)
-                    showMsg(R.string.account_sign_out_fail)
+
+                    is AccountState.RequestUserSuccess -> setupUserUI(state.user)
+                    is AccountState.Fail -> showMsg(state.msgRes)
+
                 }
             }
         }
