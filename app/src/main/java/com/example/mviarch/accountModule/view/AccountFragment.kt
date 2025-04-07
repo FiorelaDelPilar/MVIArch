@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -16,7 +17,8 @@ import com.example.mviarch.commonModule.utils.Constants
 import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
 import com.example.mviarch.mainModule.MainActivity
 import com.example.mviarch.R
-import com.example.mviarch.accountModule.AccountViewModule
+import com.example.mviarch.accountModule.AccountViewModel
+import com.example.mviarch.accountModule.AccountViewModelFactory
 import com.example.mviarch.accountModule.model.AccountRepository
 import com.example.mviarch.accountModule.model.AccountState
 import com.example.mviarch.commonModule.entities.FirebaseUser
@@ -42,7 +44,7 @@ class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
-    private lateinit var vm: AccountViewModule
+    private lateinit var vm: AccountViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +63,11 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val vm = AccountViewModule(AccountRepository(FakeFirebaseAuth()))
+        vm =
+            ViewModelProvider(
+                this,
+                AccountViewModelFactory(AccountRepository(FakeFirebaseAuth()))
+            )[AccountViewModel::class.java]
     }
 
     private fun setupUserUI(user: FirebaseUser) {

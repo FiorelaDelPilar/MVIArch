@@ -6,7 +6,7 @@ import com.example.mviarch.accountModule.model.AccountState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class AccountViewModule(private val repository: AccountRepository) : ViewModel() {
+class AccountViewModel(private val repository: AccountRepository) : ViewModel() {
     private val _state = MutableStateFlow<AccountState>(AccountState.Init)
     val state: StateFlow<AccountState> = _state
 
