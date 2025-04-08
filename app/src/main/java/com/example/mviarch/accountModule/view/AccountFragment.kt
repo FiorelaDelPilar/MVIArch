@@ -19,6 +19,7 @@ import com.example.mviarch.mainModule.MainActivity
 import com.example.mviarch.R
 import com.example.mviarch.accountModule.AccountViewModel
 import com.example.mviarch.accountModule.AccountViewModelFactory
+import com.example.mviarch.accountModule.intent.AccountIntent
 import com.example.mviarch.accountModule.model.AccountRepository
 import com.example.mviarch.accountModule.model.AccountState
 import com.example.mviarch.commonModule.entities.FirebaseUser
@@ -119,7 +120,7 @@ class AccountFragment : Fragment() {
     private fun setupButtons() {
         binding.btnSignOut.setOnClickListener {
             lifecycleScope.launch {
-                //TODO
+                vm.channel.send(AccountIntent.SignOut)
             }
         }
     }
@@ -153,6 +154,11 @@ class AccountFragment : Fragment() {
 
     private fun showProgress(isVisible: Boolean) {
         binding.contentProgress.root.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch { vm.channel.send(AccountIntent.RequestUser) }
     }
 
     override fun onDestroyView() {

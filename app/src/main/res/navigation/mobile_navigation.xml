@@ -7,13 +7,12 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.mviarch.HomeFragment"
-        android:label="@string/home_title"
-        tools:layout="@layout/fragment_home" />
+        android:name="com.example.mviarch.homeModule.HomeFragment"
+        android:label="@string/home_title" />
 
     <fragment
         android:id="@+id/navigation_favourite"
-        android:name="com.example.mviarch.FavouriteFragment"
+        android:name="com.example.mviarch.favouriteModule.FavouriteFragment"
         android:label="@string/favourite_title"
         tools:layout="@layout/fragment_home"/>
 
