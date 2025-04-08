@@ -18,13 +18,12 @@
 
     <fragment
         android:id="@+id/navigation_promo"
-        android:name="com.example.mviarch.PromoFragment"
+        android:name="com.example.mviarch.promoModule.PromoFragment"
         android:label="@string/promo_title"
         tools:layout="@layout/fragment_promo" />
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.example.mviarch.AccountFragment"
-        android:label="@string/account_title"
-        tools:layout="@layout/fragment_account" />
+        android:name="com.example.mviarch.accountModule.view.AccountFragment"
+        android:label="@string/account_title" />
 </navigation>

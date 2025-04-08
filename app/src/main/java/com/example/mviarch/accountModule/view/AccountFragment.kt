@@ -25,6 +25,7 @@ import com.example.mviarch.accountModule.model.AccountState
 import com.example.mviarch.commonModule.entities.FirebaseUser
 import com.example.mviarch.databinding.FragmentAccountBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /****
@@ -118,8 +119,9 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupButtons() {
+        //Dispatchers.IO es si estuviera con una peticion a retrofit o base de datos
         binding.btnSignOut.setOnClickListener {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 vm.channel.send(AccountIntent.SignOut)
             }
         }
@@ -158,7 +160,9 @@ class AccountFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch { vm.channel.send(AccountIntent.RequestUser) }
+        //para que siempre que el usuario llegue al módulo se refresque la información
+        //Dispatchers.IO es si estuviera con una peticion a retrofit o base de datos
+        lifecycleScope.launch(Dispatchers.IO) { vm.channel.send(AccountIntent.RequestUser) }
     }
 
     override fun onDestroyView() {
