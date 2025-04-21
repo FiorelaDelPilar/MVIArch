@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mviarch.commonModule.utils.Constants
-import com.example.mviarch.R
-import com.example.mviarch.WineApplication
-import com.example.mviarch.accountModule.model.AccountState
 import com.example.mviarch.updateModule.UpdateDialogFragment
 import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.commonModule.utils.OnClickListener
@@ -19,11 +16,9 @@ import com.example.mviarch.favouriteModule.intent.FavouriteIntent
 import com.example.mviarch.favouriteModule.model.FavouriteRepository
 import com.example.mviarch.favouriteModule.model.FavouriteState
 import com.example.mviarch.favouriteModule.model.RoomDatabase
-import com.example.mviarch.mainModule.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /****
  * Project: Wines
@@ -83,25 +78,6 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
     private fun getWines() {
         lifecycleScope.launch(Dispatchers.IO) {
             vm.channel.send(FavouriteIntent.RequestWine)
-            /*
-              try {
-                val wines = WineApplication.database.wineDao().getAllWines()
-                withContext(Dispatchers.Main) {
-                    if (wines.isNotEmpty()) {
-                        showNoDataView(false)
-                        showRecyclerView(true)
-                        adapter.submitList(wines)
-                    } else {
-                        showRecyclerView(false)
-                        showNoDataView(true)
-                    }
-                }
-            } catch (e: Exception) {
-                showMsg(R.string.room_request_fail)
-            } finally {
-                showProgress(false)
-            }
-             */
         }
     }
 
@@ -113,7 +89,12 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
                     is FavouriteState.Init -> {}
                     is FavouriteState.ShowProgress -> showProgress(true)
                     is FavouriteState.HideProgress -> showProgress(false)
-                    is FavouriteState.RequestWineSuccess -> adapter.submitList(state.list)
+                    is FavouriteState.RequestWineSuccess -> {
+                        adapter.submitList(state.list)
+                        showNoDataView(state.list.isEmpty())
+                        showRecyclerView(state.list.isNotEmpty())
+                    }
+
                     is FavouriteState.AddWineSucess -> showMsg(state.msgRes)
                     is FavouriteState.DeleteWineSucess -> showMsg(state.msgRes)
                     is FavouriteState.Fail -> showMsg(state.msgRes)
@@ -152,28 +133,8 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
         lifecycleScope.launch(Dispatchers.IO) {
             if (wine.isFavorite) {
                 vm.channel.send(FavouriteIntent.AddWine(wine))
-                /*
-                val result = WineApplication.database.wineDao().addWine(wine)
-                 if (result == -1L) {
-                     Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT)
-                         .show()
-                 } else {
-                     Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT)
-                         .show()
-                 }
-                 */
             } else {
                 vm.channel.send(FavouriteIntent.DeleteWine(wine))
-                val result = WineApplication.database.wineDao().deleteWine(wine)
-                /*
-                if (result == 0) {
-                    Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-                 */
             }
         }
     }

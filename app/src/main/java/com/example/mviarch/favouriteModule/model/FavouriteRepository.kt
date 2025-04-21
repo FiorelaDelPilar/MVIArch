@@ -7,11 +7,7 @@ import com.example.mviarch.commonModule.utils.Constants
 class FavouriteRepository(private val db: RoomDatabase) {
     fun getAllWines(): FavouriteState {
         val result = db.getAllWines()
-        return if (result.isNotEmpty()) {
-            FavouriteState.RequestWineSuccess(result)
-        } else {
-            FavouriteState.Fail(Constants.EC_REQUEST, R.string.room_request_fail)
-        }
+        return FavouriteState.RequestWineSuccess(result)
     }
 
     fun addWine(wine: Wine): FavouriteState {
