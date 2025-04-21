@@ -1,4 +1,4 @@
-package com.example.mviarch.favouriteModule
+package com.example.mviarch.favouriteModule.view
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

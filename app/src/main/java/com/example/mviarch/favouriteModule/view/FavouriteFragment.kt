@@ -1,4 +1,4 @@
-package com.example.mviarch.favouriteModule
+package com.example.mviarch.favouriteModule.view
 
 import android.os.Bundle
 import android.view.View
