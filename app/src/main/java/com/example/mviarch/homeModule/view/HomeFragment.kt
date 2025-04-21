@@ -84,28 +84,6 @@ class HomeFragment : WineBaseFragment(), OnClickListener {
     private fun getWines() {
         lifecycleScope.launch(Dispatchers.IO) {
             vm.channel.send(HomeIntent.RequestWine)
-            /*
-              try {
-                  val serverOk = Random.nextBoolean()
-                  val wines = if (serverOk) service.getRedWines()
-                  else listOf()
-
-                  withContext(Dispatchers.Main) {
-                      if (wines.isNotEmpty()) {
-                          showNoDataView(false)
-                          showRecyclerView(true)
-                          adapter.submitList(wines)
-                      } else {
-                          showRecyclerView(false)
-                          showNoDataView(true)
-                      }
-                  }
-              } catch (e: Exception) {
-                  showMsg(R.string.common_general_fail)
-              } finally {
-                  showProgress(false)
-              }
-             */
         }
     }
 
@@ -190,14 +168,6 @@ class HomeFragment : WineBaseFragment(), OnClickListener {
         lifecycleScope.launch(Dispatchers.IO) {
             wine.isFavorite = true
             vm.channel.send(HomeIntent.AddWine(wine))
-            /*
-            val result = WineApplication.database.wineDao().addWine(wine)
-            if (result == -1L) {
-                showMsg(R.string.room_save_fail)
-            } else {
-                showMsg(R.string.room_save_success)
-            }
-             */
         }
     }
 }
