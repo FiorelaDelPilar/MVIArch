@@ -1,4 +1,4 @@
-package com.example.mviarch.homeModule
+package com.example.mviarch.homeModule.view
 
 import android.content.Context
 import android.view.LayoutInflater
