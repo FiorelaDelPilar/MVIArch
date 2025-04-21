@@ -2,15 +2,24 @@ package com.example.mviarch.favouriteModule.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mviarch.commonModule.utils.Constants
 import com.example.mviarch.R
 import com.example.mviarch.WineApplication
+import com.example.mviarch.accountModule.model.AccountState
 import com.example.mviarch.updateModule.UpdateDialogFragment
 import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.commonModule.utils.OnClickListener
 import com.example.mviarch.commonModule.view.WineBaseFragment
+import com.example.mviarch.favouriteModule.FavouriteViewModel
+import com.example.mviarch.favouriteModule.FavouriteViewModelFactory
+import com.example.mviarch.favouriteModule.intent.FavouriteIntent
+import com.example.mviarch.favouriteModule.model.FavouriteRepository
+import com.example.mviarch.favouriteModule.model.FavouriteState
+import com.example.mviarch.favouriteModule.model.RoomDatabase
+import com.example.mviarch.mainModule.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,13 +42,24 @@ import kotlinx.coroutines.withContext
 class FavouriteFragment : WineBaseFragment(), OnClickListener {
 
     private lateinit var adapter: WineFavListAdapter
+    private lateinit var vm: FavouriteViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewModel()
         setupAdapter()
         setupRecyclerView()
         setupSwipeRefresh()
+        setupObservers()
+    }
+
+    private fun setupViewModel() {
+        vm = ViewModelProvider(
+            this,
+            FavouriteViewModelFactory(FavouriteRepository(RoomDatabase()))
+        )[FavouriteViewModel::class.java]
+
     }
 
     private fun setupAdapter() {
@@ -62,9 +82,11 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
 
     private fun getWines() {
         lifecycleScope.launch(Dispatchers.IO) {
-            try {
+            vm.channel.send(FavouriteIntent.RequestWine)
+            /*
+              try {
                 val wines = WineApplication.database.wineDao().getAllWines()
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     if (wines.isNotEmpty()) {
                         showNoDataView(false)
                         showRecyclerView(true)
@@ -78,6 +100,25 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
                 showMsg(R.string.room_request_fail)
             } finally {
                 showProgress(false)
+            }
+             */
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+
+            vm.state.collect { state ->
+                when (state) {
+                    is FavouriteState.Init -> {}
+                    is FavouriteState.ShowProgress -> showProgress(true)
+                    is FavouriteState.HideProgress -> showProgress(false)
+                    is FavouriteState.RequestWineSuccess -> adapter.submitList(state.list)
+                    is FavouriteState.AddWineSucess -> showMsg(state.msgRes)
+                    is FavouriteState.DeleteWineSucess -> showMsg(state.msgRes)
+                    is FavouriteState.Fail -> showMsg(state.msgRes)
+
+                }
             }
         }
     }
@@ -100,7 +141,6 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        showProgress(true)
         getWines()
     }
 
@@ -110,20 +150,30 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
     override fun onFavorite(wine: Wine) {
         wine.isFavorite = !wine.isFavorite
         lifecycleScope.launch(Dispatchers.IO) {
-            if (wine.isFavorite){
+            if (wine.isFavorite) {
+                vm.channel.send(FavouriteIntent.AddWine(wine))
+                /*
                 val result = WineApplication.database.wineDao().addWine(wine)
-                if (result == -1L) {
-                    Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT).show()
-                } else {
-                    Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT).show()
-                }
+                 if (result == -1L) {
+                     Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT)
+                         .show()
+                 } else {
+                     Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT)
+                         .show()
+                 }
+                 */
             } else {
+                vm.channel.send(FavouriteIntent.DeleteWine(wine))
                 val result = WineApplication.database.wineDao().deleteWine(wine)
+                /*
                 if (result == 0) {
-                    Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT)
+                        .show()
                 } else {
-                    Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, R.string.room_save_success, Snackbar.LENGTH_SHORT)
+                        .show()
                 }
+                 */
             }
         }
     }

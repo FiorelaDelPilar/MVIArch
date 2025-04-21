@@ -6,11 +6,13 @@ import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.favouriteModule.intent.FavouriteIntent
 import com.example.mviarch.favouriteModule.model.FavouriteRepository
 import com.example.mviarch.favouriteModule.model.FavouriteState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavouriteViewModel(private val repository: FavouriteRepository) : ViewModel() {
     private val _state = MutableStateFlow<FavouriteState>(FavouriteState.Init)
@@ -35,33 +37,39 @@ class FavouriteViewModel(private val repository: FavouriteRepository) : ViewMode
         }
     }
 
-    private fun getAllWines() {
+    private suspend fun getAllWines() {
         _state.value = FavouriteState.ShowProgress
 
-        try {//TODO: withContext...
-            _state.value = repository.getAllWines()
+        try {
+            withContext(Dispatchers.IO) {
+                _state.value = repository.getAllWines()
+            }
         } finally {
             _state.value = FavouriteState.HideProgress
         }
     }
 
 
-    private fun addWine(wine: Wine) {
+    private suspend fun addWine(wine: Wine) {
         _state.value = FavouriteState.ShowProgress
 
         try {
-            _state.value = repository.addWine(wine)
+            withContext(Dispatchers.IO) {
+                _state.value = repository.addWine(wine)
+            }
         } finally {
             _state.value = FavouriteState.HideProgress
         }
     }
 
 
-    private fun deleteWine(wine: Wine) {
+    private suspend fun deleteWine(wine: Wine) {
         _state.value = FavouriteState.ShowProgress
 
         try {
-            _state.value = repository.deleteWine(wine)
+            withContext(Dispatchers.IO) {
+                _state.value = repository.deleteWine(wine)
+            }
         } finally {
             _state.value = FavouriteState.HideProgress
         }
