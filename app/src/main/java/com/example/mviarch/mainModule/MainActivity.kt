@@ -5,7 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.mviarch.loginModule.LoginFragment
+import com.example.mviarch.loginModule.view.LoginFragment
 import com.example.mviarch.R
 import com.example.mviarch.databinding.ActivityMainBinding
 

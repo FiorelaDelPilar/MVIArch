@@ -1,4 +1,4 @@
-package com.example.mviarch.loginModule
+package com.example.mviarch.loginModule.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
