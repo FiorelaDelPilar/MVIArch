@@ -3,8 +3,6 @@ package com.example.mviarch.homeModule
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mviarch.commonModule.entities.Wine
-import com.example.mviarch.favouriteModule.intent.FavouriteIntent
-import com.example.mviarch.favouriteModule.model.FavouriteState
 import com.example.mviarch.homeModule.intent.HomeIntent
 import com.example.mviarch.homeModule.model.HomeRepository
 import com.example.mviarch.homeModule.model.HomeState
