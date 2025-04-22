@@ -1,7 +1,6 @@
 package com.example.mviarch.accountModule.view
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mviarch.commonModule.utils.Constants
 import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
-import com.example.mviarch.mainModule.MainActivity
+import com.example.mviarch.mainModule.view.MainActivity
 import com.example.mviarch.R
 import com.example.mviarch.accountModule.AccountViewModel
 import com.example.mviarch.accountModule.AccountViewModelFactory
@@ -27,6 +26,7 @@ import com.example.mviarch.databinding.FragmentAccountBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 /****
  * Project: Wines
@@ -90,7 +90,7 @@ class AccountFragment : Fragment() {
     private fun setupIntents() {
         binding.tvEmail.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse(Constants.DATA_MAIL_TO)
+                data = Constants.DATA_MAIL_TO.toUri()
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(binding.tvEmail.text.toString()))
                 putExtra(Intent.EXTRA_SUBJECT, "From kotlin architectures course")
             }
@@ -100,7 +100,7 @@ class AccountFragment : Fragment() {
         binding.tvPhone.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL).apply {
                 val phone = (it as TextView).text
-                data = Uri.parse("${Constants.DATA_TEL}$phone")
+                data = "${Constants.DATA_TEL}$phone".toUri()
             }
             launchIntent(intent)
         }

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
-import com.example.mviarch.mainModule.MainActivity
+import com.example.mviarch.mainModule.view.MainActivity
 import com.example.mviarch.databinding.FragmentLoginBinding
 import com.example.mviarch.loginModule.LoginViewModel
 import com.example.mviarch.loginModule.LoginViewModelFactory

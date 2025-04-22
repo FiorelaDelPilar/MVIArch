@@ -1,4 +1,4 @@
-package com.example.mviarch.mainModule
+package com.example.mviarch.mainModule.view
 
 import android.os.Bundle
 import android.view.View
