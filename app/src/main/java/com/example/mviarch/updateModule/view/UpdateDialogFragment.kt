@@ -10,16 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.mviarch.commonModule.utils.Constants
 import com.example.mviarch.R
-import com.example.mviarch.WineApplication
 import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.databinding.FragmentDialogUpdateBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.mviarch.updateModule.UpdateViewModel
+import com.example.mviarch.updateModule.UpdateViewModelFactory
+import com.example.mviarch.updateModule.intent.UpdateIntent
+import com.example.mviarch.updateModule.model.RoomDatabase
+import com.example.mviarch.updateModule.model.UpdateRepository
+import com.example.mviarch.updateModule.model.UpdateState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /****
  * Project: Wines
@@ -45,6 +49,8 @@ class UpdateDialogFragment : DialogFragment(), OnShowListener {
 
     private var onUpdateListener: () -> Unit = {}
 
+    private lateinit var vm: UpdateViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -69,8 +75,10 @@ class UpdateDialogFragment : DialogFragment(), OnShowListener {
         return dialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?) = binding.root
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = binding.root
 
     override fun onShow(dialogInterface: DialogInterface?) {
         val dialog = dialog as? AlertDialog
@@ -81,24 +89,22 @@ class UpdateDialogFragment : DialogFragment(), OnShowListener {
                 showProgress(true)
                 lifecycleScope.launch(Dispatchers.IO) {
                     wine.rating.average = binding.rating.rating.toString()
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val result = WineApplication.database.wineDao().updateWine(wine)
-                        withContext(Dispatchers.Main) {
-                            if (result == 0) {
-                                Snackbar.make(binding.root, R.string.room_save_fail, Snackbar.LENGTH_SHORT).show()
-                            } else {
-                                showMsg(R.string.room_save_success)
-                                dismiss()
-                            }
-                            showProgress(false)
-                        }
-                    }
+                    vm.channel.send(UpdateIntent.UpdateWine(wine))
                 }
             }
             negativeButton.setOnClickListener { dismiss() }
         }
 
+        setupViewModel()
+        setupObservers()
         getWineById()
+    }
+
+    private fun setupViewModel() {
+        vm = ViewModelProvider(
+            this,
+            UpdateViewModelFactory(UpdateRepository(RoomDatabase()))
+        )[UpdateViewModel::class.java]
     }
 
     private fun showMsg(msgRes: Int) {
@@ -111,10 +117,31 @@ class UpdateDialogFragment : DialogFragment(), OnShowListener {
 
     private fun getWineById() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val result = WineApplication.database.wineDao().getWineById(_wineId)
-            wine = result
-            withContext(Dispatchers.Main) {
-                setupUI()
+            vm.channel.send(UpdateIntent.RequestWine(_wineId))
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+
+            vm.state.collect { state ->
+                when (state) {
+                    is UpdateState.Init -> {}
+                    is UpdateState.ShowProgress -> showProgress(true)
+                    is UpdateState.HideProgress -> showProgress(false)
+                    is UpdateState.RequestWineSuccess -> {
+                        wine = state.wine
+                        setupUI()
+                    }
+
+                    is UpdateState.UpdateWineSuccess -> {
+                        showMsg(R.string.room_save_success)
+                        dismiss()
+                    }
+
+                    is UpdateState.Fail -> showMsg(state.msgRes)
+
+                }
             }
         }
     }
