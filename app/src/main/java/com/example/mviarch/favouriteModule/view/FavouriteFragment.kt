@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mviarch.commonModule.utils.Constants
-import com.example.mviarch.updateModule.UpdateDialogFragment
+import com.example.mviarch.updateModule.view.UpdateDialogFragment
 import com.example.mviarch.commonModule.entities.Wine
 import com.example.mviarch.commonModule.utils.OnClickListener
 import com.example.mviarch.commonModule.view.WineBaseFragment
@@ -147,7 +147,6 @@ class FavouriteFragment : WineBaseFragment(), OnClickListener {
         fragment.arguments = args
         fragment.show(fragmentManager, UpdateDialogFragment::class.java.simpleName)
         fragment.setOnUpdateListener {
-            binding.srlResults.isRefreshing = true
             getWines()
         }
     }

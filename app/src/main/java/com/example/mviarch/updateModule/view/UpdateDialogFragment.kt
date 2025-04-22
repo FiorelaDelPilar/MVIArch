@@ -1,4 +1,4 @@
-package com.example.mviarch.updateModule
+package com.example.mviarch.updateModule.view
 
 import android.app.AlertDialog
 import android.app.Dialog
