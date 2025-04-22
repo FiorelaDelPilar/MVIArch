@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_promo"
-        android:name="com.example.mviarch.promoModule.PromoFragment"
+        android:name="com.example.mviarch.promoModule.view.PromoFragment"
         android:label="@string/promo_title"
         tools:layout="@layout/fragment_promo" />
 
