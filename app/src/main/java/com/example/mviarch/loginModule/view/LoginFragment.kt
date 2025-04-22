@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.mviarch.R
 import com.example.mviarch.commonModule.dataAccess.local.FakeFirebaseAuth
 import com.example.mviarch.mainModule.MainActivity
 import com.example.mviarch.databinding.FragmentLoginBinding
+import com.example.mviarch.loginModule.LoginViewModel
+import com.example.mviarch.loginModule.LoginViewModelFactory
+import com.example.mviarch.loginModule.intent.LoginIntent
+import com.example.mviarch.loginModule.model.LoginRepository
+import com.example.mviarch.loginModule.model.LoginState
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /****
@@ -31,9 +35,12 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private lateinit var vm: LoginViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,21 +48,22 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewModel()
         checkAuth()
         setupButtons()
+        setupObservers()
+    }
+
+    private fun setupViewModel() {
+        vm = ViewModelProvider(
+            this,
+            LoginViewModelFactory(LoginRepository(FakeFirebaseAuth()))
+        )[LoginViewModel::class.java]
     }
 
     private fun checkAuth() {
         lifecycleScope.launch {
-            showProgress(true)
-            delay(2_500)
-            val auth = FakeFirebaseAuth()
-            if (auth.isValidAuth()) {
-                closeLoginUI()
-            } else {
-                showForm(true)
-            }
-            showProgress(false)
+            vm.channel.send(LoginIntent.CheckAuth)
         }
     }
 
@@ -63,20 +71,40 @@ class LoginFragment : Fragment() {
         with(binding) {
             btnLogin.setOnClickListener {
                 lifecycleScope.launch {
-                    showProgress(true)
-                    showForm(false)
-                    val auth = FakeFirebaseAuth()
-                    if (auth.login(etUsername.text.toString(), etPin.text.toString()))
-                        closeLoginUI()
-                    else {
-                        showProgress(false)
-                        showMsg(R.string.login_login_fail)
+                    vm.channel.send(
+                        LoginIntent.Login(
+                            etUsername.text.toString(),
+                            etPin.text.toString()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+
+            vm.state.collect { state ->
+                when (state) {
+                    is LoginState.Init -> {}
+                    is LoginState.ShowProgress -> {
+                        showProgress(true)
+                        showForm(false)
+                    }
+
+                    is LoginState.HideProgress -> showProgress(false)
+                    is LoginState.AuthValid -> closeLoginUI()
+                    is LoginState.LoginScucess -> closeLoginUI()
+                    is LoginState.Fail -> {
+                        showMsg(state.msgRes)
                         showForm(true)
                     }
                 }
             }
         }
     }
+
 
     private fun showMsg(msgRes: Int) {
         Snackbar.make(binding.root, msgRes, Snackbar.LENGTH_SHORT).show()
