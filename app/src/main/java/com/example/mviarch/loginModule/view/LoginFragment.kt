@@ -49,7 +49,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewModel()
-        checkAuth()
+
         setupButtons()
         setupObservers()
     }
@@ -87,7 +87,7 @@ class LoginFragment : Fragment() {
 
             vm.state.collect { state ->
                 when (state) {
-                    is LoginState.Init -> {}
+                    is LoginState.Init -> checkAuth() //solo pasará una sola vez
                     is LoginState.ShowProgress -> {
                         showProgress(true)
                         showForm(false)
